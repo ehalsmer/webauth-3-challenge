@@ -9,12 +9,13 @@ const restricted = require('./restricted-middleware');
 const router = express.Router();
 
 router.get('/users', restricted, (req, res) => {
-    Users.getUsers()
+    Users.findByDept(req.user.department)
     .then(response => {
+        // response.push(req.user);
         res.status(200).json(response)
     })
     .catch(err => {
-        res.status(500).json(error)
+        res.status(500).json(err)
     })
 })
 
@@ -44,7 +45,7 @@ router.post('/login', (req, res) => {
             const token = generateToken(user);
             res.status(200).json({token});
         } else {
-            res.status(401).json({message: 'Invalid credentials'})
+            res.status(401).json({message: 'You shall not pass!'})
         }
     })
     .catch(err => {
@@ -54,7 +55,8 @@ router.post('/login', (req, res) => {
 
 function generateToken(user){
     const payload = {
-        username: user.username
+        username: user.username,
+        department: user.department
     }
     const options = {
         expiresIn: '8h'

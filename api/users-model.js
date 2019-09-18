@@ -4,11 +4,16 @@ module.exports = {
     getUsers,
     findBy,
     add,
-    findById
+    findById,
+    findByDept
 }
 
 function getUsers(){
     return db('users')
+}
+
+function findByDept(dept){
+    return db('users').where({department: `${dept}`});
 }
 
 function findBy(filter){
