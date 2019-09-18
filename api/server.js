@@ -3,21 +3,13 @@ const cors = require('cors');
 const helmet = require('helmet');
 const db = require('../data/dbConfig')
 
+const usersRouter = require('./users-router');
 
 const server = express();
 server.use(express.json());
 server.use(cors());
 server.use(helmet());
 
-server.get('/', (req, res) => {
-    db('users')
-    .then(response => {
-        res.status(200).json(response)
-
-    })
-    .catch(err => {
-        res.status(500).json(error)
-    })
-})
+server.use('/api', usersRouter)
 
 module.exports = server;
