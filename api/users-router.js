@@ -3,14 +3,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const Users = require('./users-model');
+const secrets = require('../config/secrets');
+const restricted = require('./restricted-middleware');
 
 const router = express.Router();
 
-router.get('/users', (req, res) => {
+router.get('/users', restricted, (req, res) => {
     Users.getUsers()
     .then(response => {
         res.status(200).json(response)
-
     })
     .catch(err => {
         res.status(500).json(error)
@@ -58,7 +59,7 @@ function generateToken(user){
     const options = {
         expiresIn: '8h'
     }
-    return jwt.sign(payload, 'server-secret', options)
+    return jwt.sign(payload, secrets.jwtSecret, options)
 }
 
 module.exports = router;
