@@ -5,9 +5,14 @@ const db = require('../data/dbConfig')
 
 const usersRouter = require('./users-router');
 
+const corsConfig = {
+    origin: 'http://localhost:3000',
+    credentials: true
+  }
+
 const server = express();
 server.use(express.json());
-server.use(cors());
+server.use(cors(corsConfig));
 server.use(helmet());
 
 server.use('/api', usersRouter)
